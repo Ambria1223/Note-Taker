@@ -4,10 +4,6 @@ const fs = require("fs");
 const path = require("path");
 
 
-// handling asynchronous processes
-const readFileAsync = util.promisify(fs.readFile);
-const writefileAsync = util.promisify(fs.writeFile);
-
 // setting up server
 const app = express();
 const PORT = process.env.PORT || 3001;
