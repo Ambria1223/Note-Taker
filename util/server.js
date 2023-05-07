@@ -1,18 +1,22 @@
-
+// dependecies
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
+const util = require("util");
 
+// handling asynchronous processes
+const readFileAsync = util.promisify(fs.readFile);
+const writefileAsync = util.promisify(fs.writeFile);
+
+// setting up server
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 
-
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 app.use(express.static("public"));
+app.use(express.json());
 
-
-app.get("/notes", (req, res) => {
+// HTML routes
+app.get("/api/notes", (req, res) => {
   res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
 
@@ -20,7 +24,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/public/index.html"));
 });
 
-
+// API routes
 app.get("/api/notes", (req, res) => {
   fs.readFile("./db.json", "utf8", (err, data) => {
     if (err) throw err;
@@ -34,11 +38,11 @@ app.post("/api/notes", (req, res) => {
 
     let notes = JSON.parse(data);
 
-
+    // Assign unique ID to new note
     let newNote = req.body;
     newNote.id = notes.length + 1;
 
-    
+    // Add new note to notes array and write to db.json file
     notes.push(newNote);
     fs.writeFile("./db.json", JSON.stringify(notes), err => {
       if (err) throw err;
