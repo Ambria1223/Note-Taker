@@ -10,7 +10,7 @@ const writefileAsync = util.promisify(fs.writeFile);
 
 // setting up server
 const app = express();
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 3001;
 
 app.use(express.static("public"));
 app.use(express.json());
@@ -52,6 +52,4 @@ app.post("/api/notes", (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`Server listening on http://localhost:${PORT}`);
-});
+app.listen(process.env.PORT || 3001);
